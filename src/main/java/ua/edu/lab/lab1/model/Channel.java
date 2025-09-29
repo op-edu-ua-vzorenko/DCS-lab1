@@ -1,27 +1,64 @@
 package ua.edu.lab.lab1.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 public class Channel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id;   // локальный ID в нашей БД
 
-    private String name;
+    private Long channelId;      // ID канала из Telegram
+    private String type;         // тип ("channel", "supergroup" и т.д.)
+    private String title;        // название канала
+    private String username;     // @username канала (если есть)
+    @Column(length = 2000)       // описание может быть длинным
     private String description;
+    private String inviteLink;   // приглашение
+    private String photoUrl;     // ссылка на фото (если сохраним)
+    private Boolean isForum;     // является ли форумом
+    private Boolean hasProtectedContent; // защита от пересылки
+    private Boolean joinToSendMessages;  // нужно ли вступить для сообщений
+
+    private LocalDateTime fetchedAt;     // когда мы сохранили данные
 
     // геттеры и сеттеры
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public Long getChannelId() { return channelId; }
+    public void setChannelId(Long channelId) { this.channelId = channelId; }
+
+    public String getType() { return type; }
+    public void setType(String type) { this.type = type; }
+
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+
+    public String getInviteLink() { return inviteLink; }
+    public void setInviteLink(String inviteLink) { this.inviteLink = inviteLink; }
+
+    public String getPhotoUrl() { return photoUrl; }
+    public void setPhotoUrl(String photoUrl) { this.photoUrl = photoUrl; }
+
+    public Boolean getIsForum() { return isForum; }
+    public void setIsForum(Boolean isForum) { this.isForum = isForum; }
+
+    public Boolean getHasProtectedContent() { return hasProtectedContent; }
+    public void setHasProtectedContent(Boolean hasProtectedContent) { this.hasProtectedContent = hasProtectedContent; }
+
+    public Boolean getJoinToSendMessages() { return joinToSendMessages; }
+    public void setJoinToSendMessages(Boolean joinToSendMessages) { this.joinToSendMessages = joinToSendMessages; }
+
+    public LocalDateTime getFetchedAt() { return fetchedAt; }
+    public void setFetchedAt(LocalDateTime fetchedAt) { this.fetchedAt = fetchedAt; }
 }
