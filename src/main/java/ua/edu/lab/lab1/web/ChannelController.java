@@ -52,7 +52,7 @@ public class ChannelController {
             if (patch.getDescription() != null) existing.setDescription(patch.getDescription());
             if (patch.getInviteLink() != null) existing.setInviteLink(patch.getInviteLink());
             if (patch.getPhotoUrl() != null) existing.setPhotoUrl(patch.getPhotoUrl());
-            if (patch.getIsForum() != null) existing.setIsForum(patch.getIsForum());
+            if (patch.getForum() != null) existing.setForum(patch.getForum());
             if (patch.getHasProtectedContent() != null) existing.setHasProtectedContent(patch.getHasProtectedContent());
             if (patch.getJoinToSendMessages() != null) existing.setJoinToSendMessages(patch.getJoinToSendMessages());
             existing.setFetchedAt(LocalDateTime.now()); // обновляем метку времени

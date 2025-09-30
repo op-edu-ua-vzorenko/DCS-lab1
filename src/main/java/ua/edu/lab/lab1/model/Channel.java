@@ -5,13 +5,15 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "channels")
 public class Channel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;   // локальный ID в нашей БД
 
-    private Long channelId;      // ID канала из Telegram
+    @Column(name = "channel_id", unique = true)
+    private Long channelId; // ID канала из Telegram
     private String type;         // тип ("channel", "supergroup" и т.д.)
     private String title;        // название канала
     private String username;     // @username канала (если есть)
@@ -25,40 +27,99 @@ public class Channel {
 
     private LocalDateTime fetchedAt;     // когда мы сохранили данные
 
-    // геттеры и сеттеры
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public Long getChannelId() { return channelId; }
-    public void setChannelId(Long channelId) { this.channelId = channelId; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
+    public Long getChannelId() {
+        return channelId;
+    }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public void setChannelId(Long channelId) {
+        this.channelId = channelId;
+    }
 
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
+    public String getType() {
+        return type;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public void setType(String type) {
+        this.type = type;
+    }
 
-    public String getInviteLink() { return inviteLink; }
-    public void setInviteLink(String inviteLink) { this.inviteLink = inviteLink; }
+    public String getTitle() {
+        return title;
+    }
 
-    public String getPhotoUrl() { return photoUrl; }
-    public void setPhotoUrl(String photoUrl) { this.photoUrl = photoUrl; }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public Boolean getIsForum() { return isForum; }
-    public void setIsForum(Boolean isForum) { this.isForum = isForum; }
+    public String getUsername() {
+        return username;
+    }
 
-    public Boolean getHasProtectedContent() { return hasProtectedContent; }
-    public void setHasProtectedContent(Boolean hasProtectedContent) { this.hasProtectedContent = hasProtectedContent; }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-    public Boolean getJoinToSendMessages() { return joinToSendMessages; }
-    public void setJoinToSendMessages(Boolean joinToSendMessages) { this.joinToSendMessages = joinToSendMessages; }
+    public String getDescription() {
+        return description;
+    }
 
-    public LocalDateTime getFetchedAt() { return fetchedAt; }
-    public void setFetchedAt(LocalDateTime fetchedAt) { this.fetchedAt = fetchedAt; }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getInviteLink() {
+        return inviteLink;
+    }
+
+    public void setInviteLink(String inviteLink) {
+        this.inviteLink = inviteLink;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    public Boolean getForum() {
+        return isForum;
+    }
+
+    public void setForum(Boolean forum) {
+        isForum = forum;
+    }
+
+    public Boolean getHasProtectedContent() {
+        return hasProtectedContent;
+    }
+
+    public void setHasProtectedContent(Boolean hasProtectedContent) {
+        this.hasProtectedContent = hasProtectedContent;
+    }
+
+    public Boolean getJoinToSendMessages() {
+        return joinToSendMessages;
+    }
+
+    public void setJoinToSendMessages(Boolean joinToSendMessages) {
+        this.joinToSendMessages = joinToSendMessages;
+    }
+
+    public LocalDateTime getFetchedAt() {
+        return fetchedAt;
+    }
+
+    public void setFetchedAt(LocalDateTime fetchedAt) {
+        this.fetchedAt = fetchedAt;
+    }
 }
