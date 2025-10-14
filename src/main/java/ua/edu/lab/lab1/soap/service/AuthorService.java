@@ -21,14 +21,12 @@ public class AuthorService implements AuthorServiceInterface {
 
     private final AuthorRepository authorRepository;
 
-    // Spring автоматично "вставить" сюди ваш репозиторій (Dependency Injection)
     public AuthorService(AuthorRepository authorRepository) {
         this.authorRepository = authorRepository;
     }
 
     @Override
     public Author getAuthorById(Long id) {
-        // findById повертає Optional, тому ми використовуємо orElse(null)
         return authorRepository.findById(id).orElse(null);
     }
 
@@ -36,17 +34,14 @@ public class AuthorService implements AuthorServiceInterface {
     public Author addAuthor(AuthorCreateRequest authorData) {
         Author newAuthor = new Author();
 
-        // Переносимо дані з DTO в нашу модель для збереження в БД
         newAuthor.setExternalId(authorData.getExternalId());
         newAuthor.setDisplayName(authorData.getDisplayName());
 
-        // Для необов'язкових полів ставимо значення за замовчуванням
         newAuthor.setUsername(authorData.getUsername() != null ? authorData.getUsername() : "");
         newAuthor.setAvatarUrl(authorData.getAvatarUrl() != null ? authorData.getAvatarUrl() : "");
         newAuthor.setBot(authorData.getBot() != null ? authorData.getBot() : false);
 
-        // Встановлюємо значення, які клієнт не передає
-        newAuthor.setSourceType(SourceType.TELEGRAM); // Припустимо, що сервіс працює тільки з Telegram
+        newAuthor.setSourceType(SourceType.TELEGRAM);
 
         return authorRepository.save(newAuthor);
     }

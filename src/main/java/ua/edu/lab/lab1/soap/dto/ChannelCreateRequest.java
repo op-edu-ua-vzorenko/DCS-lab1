@@ -37,11 +37,8 @@ public class ChannelCreateRequest {
     protected Boolean hasProtectedContent;
     protected Boolean joinToSendMessages;
 
-    // Пустий конструктор для JAXB
     public ChannelCreateRequest() {
     }
-
-    // Getters and Setters для всіх полів...
 
     public Long getChannelId() {
         return channelId;

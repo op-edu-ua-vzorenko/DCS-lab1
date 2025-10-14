@@ -4,7 +4,7 @@ import jakarta.jws.WebService;
 import org.springframework.stereotype.Service;
 import ua.edu.lab.lab1.model.Channel;
 import ua.edu.lab.lab1.repository.ChannelRepository;
-import ua.edu.lab.lab1.soap.contract.ChannelServiceInterface; // <-- Зверніть увагу на новий шлях до інтерфейсу
+import ua.edu.lab.lab1.soap.contract.ChannelServiceInterface;
 import ua.edu.lab.lab1.soap.dto.ChannelCreateRequest;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -15,10 +15,9 @@ import java.util.List;
         serviceName = "ChannelService",
         portName = "ChannelServicePort",
         targetNamespace = "http://lab.edu.ua/lab1/soap",
-        // Вказуємо повний шлях до вашого нового інтерфейсу
         endpointInterface = "ua.edu.lab.lab1.soap.contract.ChannelServiceInterface"
 )
-public class ChannelService implements ChannelServiceInterface { // <-- Реалізуємо новий інтерфейс
+public class ChannelService implements ChannelServiceInterface {
 
     private final ChannelRepository channelRepository;
 
@@ -35,12 +34,10 @@ public class ChannelService implements ChannelServiceInterface { // <-- Реал
     public Channel addChannel(ChannelCreateRequest channelData) {
         Channel newChannel = new Channel();
 
-        // Переносимо дані з DTO в нашу JPA-сутність
         newChannel.setChannelId(channelData.getChannelId());
         newChannel.setType(channelData.getType());
         newChannel.setTitle(channelData.getTitle());
 
-        // Обробка необов'язкових полів
         newChannel.setUsername(channelData.getUsername());
         newChannel.setDescription(channelData.getDescription());
         newChannel.setInviteLink(channelData.getInviteLink());
@@ -49,7 +46,6 @@ public class ChannelService implements ChannelServiceInterface { // <-- Реал
         newChannel.setHasProtectedContent(channelData.getHasProtectedContent() != null ? channelData.getHasProtectedContent() : false);
         newChannel.setJoinToSendMessages(channelData.getJoinToSendMessages() != null ? channelData.getJoinToSendMessages() : false);
 
-        // Встановлюємо серверне поле
         newChannel.setFetchedAt(LocalDateTime.now());
 
         return channelRepository.save(newChannel);
@@ -60,13 +56,12 @@ public class ChannelService implements ChannelServiceInterface { // <-- Реал
         Optional<Channel> channelOptional = channelRepository.findById(id);
 
         if (channelOptional.isEmpty()) {
-            return null; // Або можна кинути виняток, що канал не знайдено
+            return null;
         }
 
         Channel existingChannel = channelOptional.get();
         existingChannel.setDescription(newDescription);
 
-        // Зберігаємо оновлений канал і повертаємо його
         return channelRepository.save(existingChannel);
     }
 

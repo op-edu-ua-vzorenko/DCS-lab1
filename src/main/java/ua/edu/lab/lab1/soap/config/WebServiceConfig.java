@@ -15,27 +15,22 @@ public class WebServiceConfig {
     private final AuthorService authorService;
     private final ChannelService channelService;
 
-    // Spring автоматично "вставить" сюди всі необхідні компоненти
     public WebServiceConfig(Bus bus, AuthorService authorService, ChannelService channelService) {
         this.bus = bus;
         this.authorService = authorService;
         this.channelService = channelService;
     }
 
-    // Цей метод створить і опублікує ендпоінт для AuthorService
     @Bean
     public Endpoint authorEndpoint() {
         EndpointImpl endpoint = new EndpointImpl(bus, authorService);
-        // Ось саме той рядок, який визначає адресу!
         endpoint.publish("/author");
         return endpoint;
     }
 
-    // А цей - для ChannelService
     @Bean
     public Endpoint channelEndpoint() {
         EndpointImpl endpoint = new EndpointImpl(bus, channelService);
-        // І тут ми визначаємо його адресу
         endpoint.publish("/channel");
         return endpoint;
     }

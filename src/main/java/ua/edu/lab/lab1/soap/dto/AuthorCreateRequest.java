@@ -4,7 +4,6 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
-import ua.edu.lab.lab1.model.SourceType;
 
 // JAXB анотації, щоб Java знала, як перетворити це на XML
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -18,21 +17,17 @@ import ua.edu.lab.lab1.model.SourceType;
 public class AuthorCreateRequest {
 
     @XmlElement(required = true)
-    protected String externalId; // Оголошуємо, що це поле обов'язкове
+    protected String externalId; // обов'язкове поле
 
     @XmlElement(required = true)
-    protected String displayName; // І це теж
+    protected String displayName; // обов'язкове поле
 
     protected String username;
     protected String avatarUrl;
     protected Boolean isBot;
 
-    // Важливо: для JAXB потрібен публічний конструктор без аргументів
     public AuthorCreateRequest() {
     }
-
-    // Getters and Setters для всіх полів...
-    // (IntelliJ IDEA може згенерувати їх для вас: Alt+Insert -> Getter and Setter)
 
     public String getExternalId() {
         return externalId;
