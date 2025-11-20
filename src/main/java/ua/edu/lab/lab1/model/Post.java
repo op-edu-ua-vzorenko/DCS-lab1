@@ -66,8 +66,12 @@ public class Post {
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt = Instant.now();
 
+    @Column(name = "content_length")
+    private Integer contentLength;
+
     @PreUpdate
     void touch() { this.updatedAt = Instant.now(); }
+
 
     public Long getId() {
         return id;
@@ -180,4 +184,8 @@ public class Post {
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public Integer getContentLength() { return contentLength; }
+
+    public void setContentLength(Integer contentLength) { this.contentLength = contentLength; }
 }
