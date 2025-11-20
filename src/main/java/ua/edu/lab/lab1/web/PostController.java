@@ -4,6 +4,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.edu.lab.lab1.model.Post;
 import ua.edu.lab.lab1.repository.PostRepository;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import ua.edu.lab.lab1.config.RabbitConfig;
+import ua.edu.lab.lab1.dto.PostEnrichTask;
+import java.util.UUID;
 
 import java.net.URI;
 import java.util.List;
@@ -13,9 +17,12 @@ import java.util.List;
 public class PostController {
 
     private final PostRepository repo;
+    private final RabbitTemplate rabbitTemplate;
 
-    public PostController(PostRepository repo) {
+    // Обновляем конструктор под RabbitMQ
+    public PostController(PostRepository repo, RabbitTemplate rabbitTemplate) {
         this.repo = repo;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     /** Получить все посты (без сортировки, без пагинации). */
@@ -37,6 +44,15 @@ public class PostController {
     @PostMapping
     public ResponseEntity<Post> create(@RequestBody Post body) {
         Post saved = repo.save(body);
+
+        // 2. Формируем задачу для RabbitMQ
+        String hash = UUID.randomUUID().toString(); // Рандом, как ты хотел
+        PostEnrichTask task = new PostEnrichTask(saved.getId(), hash);
+
+        // 3. Отправляем в RabbitMQ
+        rabbitTemplate.convertAndSend(RabbitConfig.EXCHANGE, RabbitConfig.ROUTING_KEY, task);
+
+        System.out.println(" [Producer] Отправил задачу для Post ID: " + saved.getId() + " (Hash: " + hash + ")");
         return ResponseEntity.created(URI.create("/posts/" + saved.getId())).body(saved);
     }
 
