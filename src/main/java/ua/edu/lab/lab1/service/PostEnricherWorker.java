@@ -26,7 +26,7 @@ public class PostEnricherWorker {
 
             if (post != null) {
                 System.out.println(" [Consumer] Начинаю 'тяжелую' обработку (ждем 7 сек)...");
-                Thread.sleep(7); // Фриз на 7 секунд
+                Thread.sleep(7000); // Фриз на 7 секунд
 
                 int length = (post.getText() != null) ? post.getText().length() : 0;
 
