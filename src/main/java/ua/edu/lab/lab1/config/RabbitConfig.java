@@ -15,7 +15,7 @@ public class RabbitConfig {
     public static final String ROUTING_KEY = "post.created";
 
     @Bean
-    public Queue queue() { return new Queue(QUEUE, true); }
+    public Queue queue() { return new Queue(QUEUE, false); }
 
     @Bean
     public TopicExchange exchange() { return new TopicExchange(EXCHANGE); }

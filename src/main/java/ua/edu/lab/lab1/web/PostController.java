@@ -45,11 +45,11 @@ public class PostController {
     public ResponseEntity<Post> create(@RequestBody Post body) {
         Post saved = repo.save(body);
 
-        // 2. Формируем задачу для RabbitMQ
+        // 1. Формируем задачу для RabbitMQ
         String hash = UUID.randomUUID().toString(); // Рандом, как ты хотел
         PostEnrichTask task = new PostEnrichTask(saved.getId(), hash);
 
-        // 3. Отправляем в RabbitMQ
+        // 2. Отправляем в RabbitMQ
         rabbitTemplate.convertAndSend(RabbitConfig.EXCHANGE, RabbitConfig.ROUTING_KEY, task);
 
         System.out.println(" [Producer] Отправил задачу для Post ID: " + saved.getId() + " (Hash: " + hash + ")");
