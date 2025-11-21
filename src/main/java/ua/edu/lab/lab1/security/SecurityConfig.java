@@ -31,15 +31,21 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/error", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/channels/**").permitAll()
+                        // --- 1. БЛОК ЗАПРЕТОВ (Специфичные правила) ---
+
+                        // Создавать и менять каналы может ТОЛЬКО Админ
                         .requestMatchers(HttpMethod.POST, "/channels/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/channels/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/channels/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        .requestMatchers(HttpMethod.GET, "/channels/**").hasAnyRole("USER", "ADMIN")
+
+                        // --- 2. БЛОК ВСЕДОЗВОЛЕННОСТИ ---
+
+                        // Всё остальное (включая GET /channels, /posts, /auth и будущие контроллеры) - ОТКРЫТО
+                        .anyRequest().permitAll()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider) // Використовуємо впроваджений бін
+                .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
