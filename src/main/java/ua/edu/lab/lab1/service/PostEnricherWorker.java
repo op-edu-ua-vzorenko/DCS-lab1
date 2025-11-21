@@ -16,7 +16,7 @@ public class PostEnricherWorker {
         this.repo = repo;
     }
 
-//    @RabbitListener(queues = RabbitConfig.QUEUE)
+    @RabbitListener(queues = RabbitConfig.QUEUE)
     public void processTask(PostEnrichTask task) {
         System.out.println(" [Consumer] Получил задачу id=" + task.getPostId() + ", hash=" + task.getRandomHash());
 
