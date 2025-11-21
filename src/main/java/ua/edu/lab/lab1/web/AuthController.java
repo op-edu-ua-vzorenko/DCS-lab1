@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ua.edu.lab.lab1.dto.AuthRequest;
 import ua.edu.lab.lab1.security.JwtService;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -25,14 +27,20 @@ public class AuthController {
 
     @PostMapping("/login")
     public String login(@RequestBody AuthRequest authRequest) {
-        // 1. Спрінг Сек'юріті перевіряє логін/пароль через наш SecurityConfig (і InMemory юзерів)
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
         );
 
-        // 2. Якщо все ок — генеруємо токен для цього юзера
         if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(authRequest.getUsername());
+            // 1. Создаем мапу для дополнительных данных (Claims)
+            Map<String, Object> claims = new HashMap<>();
+
+            // 2. Кладем туда планету, которую прислал юзер (или "Unknown", если забыл)
+            String planetInfo = (authRequest.getPlanet() != null) ? authRequest.getPlanet() : "Unknown Planet";
+            claims.put("planet", planetInfo);
+
+            // 3. ВЫЗЫВАЕМ МЕТОД №2 (С claims)
+            return jwtService.generateToken(authRequest.getUsername(), claims);
         } else {
             throw new UsernameNotFoundException("Invalid user request!");
         }
