@@ -45,14 +45,19 @@ public class PostController {
     public ResponseEntity<Post> create(@RequestBody Post body) {
         Post saved = repo.save(body);
 
-        // 1. Формируем задачу для RabbitMQ
-        String hash = UUID.randomUUID().toString(); // Рандом, как ты хотел
-        PostEnrichTask task = new PostEnrichTask(saved.getId(), hash);
+        // Попытка отправить в очередь (необязательная операция)
+        try {
+            String hash = UUID.randomUUID().toString();
+            PostEnrichTask task = new PostEnrichTask(saved.getId(), hash);
+            rabbitTemplate.convertAndSend(RabbitConfig.EXCHANGE, RabbitConfig.ROUTING_KEY, task);
+            System.out.println(" [Producer] Task sent!");
+        } catch (Exception e) {
+            // В реальной жизни тут пишут в лог ERROR
+            System.err.println(" [Producer] WARNING: RabbitMQ is down! Enrichment skipped.");
+            // Мы НЕ пробрасываем ошибку дальше (throw), мы её "глотаем", чтобы не пугать юзера
+        }
 
-        // 2. Отправляем в RabbitMQ
-        rabbitTemplate.convertAndSend(RabbitConfig.EXCHANGE, RabbitConfig.ROUTING_KEY, task);
-
-        System.out.println(" [Producer] Отправил задачу для Post ID: " + saved.getId() + " (Hash: " + hash + ")");
+        // Возвращаем 201 Created в любом случае
         return ResponseEntity.created(URI.create("/posts/" + saved.getId())).body(saved);
     }
 
